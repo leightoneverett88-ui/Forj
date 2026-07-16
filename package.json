@@ -1,13 +1,12 @@
 {
-  "name": "forj-backend",
+  "name": "forj-aureth",
   "version": "1.0.0",
-  "description": "Forj — live Strava backend for the Daily Hearth (Ember Engine + OAuth + API)",
+  "private": true,
   "type": "commonjs",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "local": "FORJ_MODE=local node server.js",
-    "engine-check": "node scripts/engineCheck.js"
+    "local": "FORJ_MODE=local node server.js"
   },
   "engines": { "node": ">=18" },
   "dependencies": {
