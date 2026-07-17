@@ -1,29 +1,26 @@
 # Forj · Aureth — deployable server
 
-The whole experience is baked into `server.js` (Three.js inlined, no CDN).
-It is a Node/Express WEB SERVER — it must run as a Render **Web Service**,
-NOT a Static Site. (A Static Site only serves files from a "publish directory"
-and never runs server.js — that is the "Publish directory does not exist" error.)
+The whole experience is baked into `server.js` (Three.js + GLTFLoader inlined, no CDN).
+Node/Express WEB SERVER — deploy as a Render **Web Service**, NOT a Static Site.
 
-## Easiest: deploy as a Blueprint (uses render.yaml here)
-1. Commit these files to your repo root: server.js, package.json, render.yaml, .node-version
-2. Render Dashboard → New + → **Blueprint** → pick the Forj repo → Apply.
-   render.yaml creates a Web Service with the right build/start commands.
-3. Add env vars when prompted (or in the service's Environment tab):
-   STRAVA_CLIENT_ID, STRAVA_CLIENT_SECRET,
+## Deploy (Blueprint — easiest)
+1. Commit server.js, package.json, render.yaml, .node-version to the repo ROOT.
+2. Render → New + → **Blueprint** → pick the Forj repo → Apply (render.yaml makes a Web Service).
+3. Env vars when prompted: STRAVA_CLIENT_ID, STRAVA_CLIENT_SECRET,
    STRAVA_REDIRECT_URI = https://<your-app>.onrender.com/auth/callback
+   (Or New + → Web Service by hand → Node · build `npm install` · start `npm start`.)
+4. Strava app: Authorization Callback Domain = <your-app>.onrender.com
+5. Open /hearth → Connect with Strava (reconnect once per deploy, or set STRAVA_REFRESH_TOKEN).
 
-## Or: create the Web Service by hand
-Render Dashboard → New + → **Web Service** (NOT Static Site) → pick the repo →
-  Language: Node · Build Command: `npm install` · Start Command: `npm start`
-Then add the env vars above.
+## Your avatar (in /world → descend → 🧍 Avatar)
+Three ways to set your character:
+ · **Load a model from your device** — pick a `.glb` (one file), or a `.gltf` with its
+   `.bin` + textures, or a whole **folder**. Loads instantly, stays in your browser.
+ · **Ready Player Me** — Create in-app, or paste your avatar's `.glb` link
+   (https://models.readyplayer.me/<id>.glb). Streams from readyplayer.me (needs internet).
+ · Otherwise the rugged frontier survivor is your default.
+"Turn avatar around" fixes facing. Ready Player Me / pasted links are remembered across
+sessions (device models are per-session). In-app RPM creator uses the `demo` subdomain by
+default — for your own, make one at studio.readyplayer.me and change RPM_SUBDOMAIN in server.js.
 
-## After it deploys
-- In your Strava app settings, Authorization Callback Domain = <your-app>.onrender.com
-- Open /hearth and click "Connect with Strava" (a redeploy wipes the saved token,
-  so reconnect once per deploy — or set STRAVA_REFRESH_TOKEN to persist it).
-
-If you already have a Static Site for this repo, delete it (Static Sites can't be
-converted) and create a Web Service as above.
-
-Run locally:  `npm install && npm run local`  → http://localhost:3000
+Run locally:  npm install && npm run local  → http://localhost:3000
