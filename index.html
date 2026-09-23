@@ -1,0 +1,662 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Path to Barrow Deeps</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Karla:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style id="appcss">
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0}
+img{max-width:100%}
+[hidden]{display:none!important}
+:root{
+  color-scheme:light;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#E9ECE4;--surface:#F6F8F1;--surface2:#DFE4D8;
+  --ink:#1B221C;--ink2:#545C50;--ink3:#7C8478;--line:#C9D0C1;
+  --accent:#2C6A5C;--accent-soft:#D6E4DE;
+  --amber:#8F5417;--amber-soft:#EFE1CB;
+  --alliance:#2F5B86;--horde:#8A3226;--done:#8E9788;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#121614;--surface:#1A201C;--surface2:#232A25;
+    --ink:#E3E9DD;--ink2:#A5AE9E;--ink3:#7E887A;--line:#2E362F;
+    --accent:#77C5AD;--accent-soft:#1E2E2A;
+    --amber:#D89E56;--amber-soft:#2C2419;
+    --alliance:#7FAAD6;--horde:#D98577;--done:#69735F;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#121614;--surface:#1A201C;--surface2:#232A25;
+  --ink:#E3E9DD;--ink2:#A5AE9E;--ink3:#7E887A;--line:#2E362F;
+  --accent:#77C5AD;--accent-soft:#1E2E2A;
+  --amber:#D89E56;--amber-soft:#2C2419;
+  --alliance:#7FAAD6;--horde:#D98577;--done:#69735F;
+}
+body{background:var(--bg);color:var(--ink);font-family:Karla,"Helvetica Neue",Arial,sans-serif;font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:800px;margin:0 auto;padding-inline:20px;padding-block:40px 72px}
+
+.eyebrow{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);margin:0 0 14px}
+h1{font-family:Fraunces,Georgia,serif;font-weight:700;font-size:clamp(32px,6.5vw,50px);line-height:1.04;letter-spacing:-.015em;margin:0 0 14px;text-wrap:balance}
+.standfirst{margin:0;max-width:56ch;color:var(--ink2);font-size:17px}
+
+/* ---------- setup ---------- */
+.step{margin:34px 0 0}
+.step-head{display:flex;align-items:baseline;gap:10px;margin-bottom:12px}
+.step-n{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.12em;color:var(--ink3);text-transform:uppercase}
+.step h2{font-family:Fraunces,Georgia,serif;font-weight:500;font-size:21px;margin:0;letter-spacing:-.01em}
+.step-hint{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11px;color:var(--ink3);margin-left:auto;font-variant-numeric:tabular-nums}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:7px}
+.opt{
+  background:var(--surface);border:1px solid var(--line);border-radius:3px;
+  padding:11px 13px;cursor:pointer;text-align:left;font:inherit;color:var(--ink);
+  display:block;width:100%;transition:border-color .12s ease,background .12s ease
+}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.opt[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.opt:disabled{opacity:.34;cursor:not-allowed}
+.opt .nm{display:block;font-weight:700;font-size:15px;line-height:1.25}
+.opt .sub{display:block;font-size:12.5px;color:var(--ink2);line-height:1.35;margin-top:3px}
+.opt .fac{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase}
+.fac.a{color:var(--alliance)}
+.fac.h{color:var(--horde)}
+.fac.n{color:var(--accent)}
+.muted{color:var(--ink3);font-size:14px;margin:10px 0 0}
+
+.go{
+  margin-top:28px;display:flex;gap:10px;flex-wrap:wrap;align-items:center
+}
+.btn{
+  font:inherit;font-weight:700;font-size:15px;cursor:pointer;
+  background:var(--accent);color:var(--bg);border:1px solid var(--accent);
+  border-radius:3px;padding:11px 22px
+}
+.btn:disabled{opacity:.36;cursor:not-allowed}
+.btn:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.btn.ghost{background:transparent;color:var(--ink2);border-color:var(--line);font-weight:500;padding:8px 14px;font-size:13px}
+
+/* ---------- plan header ---------- */
+.build{
+  display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:22px 0 0
+}
+.chip{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.07em;
+  text-transform:uppercase;background:var(--surface);border:1px solid var(--line);
+  border-radius:3px;padding:5px 9px;color:var(--ink2)
+}
+.chip b{color:var(--ink);font-weight:500}
+
+.clocks{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0 0}
+.clock{flex:1 1 200px;background:var(--surface);border:1px solid var(--line);border-radius:3px;padding:14px 16px;display:flex;align-items:baseline;gap:10px}
+.clock .n{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:28px;font-weight:500;line-height:1;font-variant-numeric:tabular-nums;color:var(--accent)}
+.clock.hot .n{color:var(--amber)}
+.clock .l{font-size:13px;color:var(--ink2);line-height:1.3}
+.clock .l b{display:block;color:var(--ink);font-weight:700}
+
+.meter{margin:20px 0 0;border-top:1px solid var(--line);padding-top:16px}
+.meter-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:9px}
+.meter-top span{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3)}
+.meter-top strong{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:13px;font-variant-numeric:tabular-nums}
+.bar{height:5px;background:var(--surface2);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width .25s ease}
+.save{margin-top:10px;font-size:12px;color:var(--ink3);font-family:"IBM Plex Mono",ui-monospace,monospace;min-height:16px}
+
+.key{display:flex;flex-wrap:wrap;gap:6px;margin:24px 0 0}
+.tag{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.09em;text-transform:uppercase;padding:2px 6px;border-radius:2px;white-space:nowrap;background:var(--surface2);color:var(--ink2)}
+.tag.gold{background:var(--amber-soft);color:var(--amber)}
+.tag.raid{background:var(--accent-soft);color:var(--accent)}
+.tag.time{background:var(--amber-soft);color:var(--amber);font-weight:500}
+.tag.unsure{background:transparent;color:var(--ink3);border:1px dashed var(--line)}
+
+/* ---------- ladder ---------- */
+.ladder{margin:36px 0 0;position:relative}
+.phase{position:relative;padding-left:52px;padding-bottom:34px}
+.phase::before{content:"";position:absolute;left:15px;top:32px;bottom:0;width:1px;background:var(--line)}
+.phase:last-child::before{display:none}
+.rung{position:absolute;left:0;top:0;width:31px;height:31px;border-radius:50%;background:var(--surface);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:12px;color:var(--ink2);font-variant-numeric:tabular-nums}
+.phase.complete .rung{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+.phase-head{margin-bottom:14px}
+.phase-when{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:4px}
+.phase-when .lv{color:var(--accent)}
+.phase h2{font-family:Fraunces,Georgia,serif;font-weight:500;font-size:24px;line-height:1.15;margin:0 0 6px;letter-spacing:-.01em}
+.phase-note{margin:0;color:var(--ink2);font-size:15px;max-width:54ch}
+.phase-count{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11px;color:var(--ink3);font-variant-numeric:tabular-nums;margin-left:auto}
+ul.items{list-style:none;margin:0;padding:0}
+li.item{background:var(--surface);border:1px solid var(--line);border-radius:3px}
+li.item + li.item{margin-top:6px}
+li.item label{display:flex;gap:12px;padding:12px 14px;cursor:pointer;align-items:flex-start}
+li.item input{appearance:none;-webkit-appearance:none;margin:2px 0 0;flex:0 0 auto;width:17px;height:17px;border:1.5px solid var(--ink3);border-radius:3px;background:transparent;cursor:pointer;position:relative}
+li.item input:checked{background:var(--accent);border-color:var(--accent)}
+li.item input:checked::after{content:"";position:absolute;left:5px;top:1px;width:4px;height:9px;border:solid var(--surface);border-width:0 2px 2px 0;transform:rotate(43deg)}
+li.item input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.txt{min-width:0}
+.t{display:block;font-weight:700;font-size:15px;line-height:1.35;margin-bottom:2px}
+.w{display:block;color:var(--ink2);font-size:14px;line-height:1.45}
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
+li.item.done .t{color:var(--done);text-decoration:line-through;text-decoration-thickness:1px}
+li.item.done .w{color:var(--done)}
+li.item.done{background:transparent}
+
+.caveats{margin:8px 0 0;background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--amber);border-radius:3px;padding:18px 20px}
+.caveats h3{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);margin:0 0 10px;font-weight:500}
+.caveats ul{margin:0;padding-left:18px;color:var(--ink2);font-size:14.5px}
+.caveats li{margin-bottom:7px}
+.caveats li:last-child{margin-bottom:0}
+footer{margin-top:36px;padding-top:18px;border-top:1px solid var(--line);font-size:13px;color:var(--ink3)}
+
+@media (max-width:460px){
+  .phase{padding-left:42px}
+  .rung{width:27px;height:27px}
+  .phase::before{left:13px;top:28px}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(132px,1fr))}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap" id="root"></div>
+<script id="state" type="application/json">{"cfg":null,"checked":{}}</script>
+<script id="appjs">
+(function(){
+"use strict";
+
+var FONTS="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Karla:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap";
+var LAUNCH=new Date("2026-11-04T00:00:00Z"), RAIDS=new Date("2026-12-09T00:00:00Z");
+
+/* ---------------- data ---------------- */
+
+var RACES={
+  human:{n:"Human",f:"a",act:"Will to Survive, Perception",pas:"Sword Specialisation, The Human Spirit",
+    note:"Sword Specialisation is a flat crit racial — worth weapon-type planning if your class uses swords. The Human Spirit helps any mana user."},
+  dwarf:{n:"Dwarf",f:"a",act:"Stoneform, Find Treasure",pas:"Mace Specialisation, Big Game Hunter",
+    note:"Stoneform clears poison and bleed, which is raid utility, not just survival. Find Treasure is quiet gold while you level."},
+  nightelf:{n:"Night Elf",f:"a",act:"Elune's Light, Shadowmeld",pas:"Quickness, Wisp Spirit",
+    note:"Elune's Light is a 10% crit active — a real damage cooldown now, not the old passive. Wisp Spirit makes corpse runs 75% faster, which matters more than it sounds during progression."},
+  gnome:{n:"Gnome",f:"a",act:"Escape Artist, Eureka!",pas:"Expansive Mind, Engineering Specialisation",
+    note:"Eureka! is new: reduced cost and 10% more damage or healing on your next three casts. Engineering Specialisation cuts failure rates, so Engineering is the natural profession fit."},
+  orc:{n:"Orc",f:"h",act:"Blood Fury, Shatter Curse",pas:"Axe Specialisation, Hardiness",
+    note:"Blood Fury now gives attack power and spell power, so it is a damage cooldown for casters too. Axe Specialisation was changed to grant crit."},
+  undead:{n:"Undead",f:"h",act:"Will of the Forsaken, Cannibalize",pas:"Underwater Breathing, Touch of the Grave",
+    note:"Touch of the Grave is a new passive life drain on hit. Will of the Forsaken remains the strongest PvP racial in the game."},
+  tauren:{n:"Tauren",f:"h",act:"War Stomp, Cultivation",pas:"Plainsrunning, Endurance",
+    note:"Cultivation grows herbs that need no Herbalism to gather — free income regardless of your professions. Endurance includes a hit chance bonus, which is unusually valuable in a vanilla hit-capped world."},
+  troll:{n:"Troll",f:"h",act:"Berserking, Rapid Regeneration",pas:"Beast Slaying, Regeneration",
+    note:"Berserking is a 10% haste active, good on every spec. Rapid Regeneration restores half your health, which is levelling downtime removed."},
+  skyborne_a:{n:"High Order Skyborne",f:"a",act:"Walk on Air, Read Ley Line",pas:"Wind Blessed, Elemental Insight",
+    note:"Read Ley Line doubles health and mana regeneration. Walk on Air is a 10-second glide. Requires the Skyborne pack, around $29.99."},
+  skyborne_h:{n:"Windshaper Skyborne",f:"h",act:"Walk on Air, Skysight",pas:"Wind Blessed, Elemental Insight",
+    note:"Skysight adds 10% mounted speed. Wind Blessed is a flat 1% haste on all damage. Requires the Skyborne pack, around $29.99."}
+};
+
+var CLASSES={
+  warrior:{n:"Warrior",armour:"Plate from 40",buffs:["ap"],
+    races:["human","dwarf","nightelf","gnome","orc","undead","tauren","troll","skyborne_a","skyborne_h"],
+    specs:"Arms (two-hand DPS), Fury (dual-wield DPS), Protection (tank)",
+    slot:"Protection is the slot every raid must fill and the one nobody volunteers for. Arms and Fury slots are plentiful but judged purely on numbers.",
+    weapon:"Arms wants the biggest two-hander available; Fury needs two one-handers; Protection needs a shield. Rage generation has been normalised in Forever, which lowers your ceiling and makes weapon quality carry more of your damage.",
+    unlock:"Defensive Stance around 10 and Berserker Stance around 30. Tactical Mastery is baseline now, so stance-dancing costs you nothing.",
+    forever:"Recklessness, Retaliation and Shield Wall are on separate cooldowns rather than sharing one, and Thunder Clap works in Defensive Stance.",
+    gold:"No class income tricks and you pay full price for the level 40 mount. Budget for it from week two.",
+    mount:true},
+  paladin:{n:"Paladin",armour:"Plate from 40",buffs:["ap"],
+    races:["human","dwarf","undead"],
+    specs:"Holy (healer), Protection (tank), Retribution (melee DPS)",
+    slot:"Holy is the dependable slot. Protection finally has a real taunt through Seal of Fury, so Prot is a genuine option in Forever rather than a meme.",
+    weapon:"Retribution wants a slow two-hander to ride the seal damage; Protection needs a one-hander and shield; Holy wants spellpower on a one-hander.",
+    unlock:"Holy Strike at level 6 — an instant Holy weapon strike on a 12-second cooldown that makes early levelling far less grim than vanilla. Consecration is baseline at 20 for every spec.",
+    forever:"Judgement no longer consumes your seal, so you stop recasting constantly. Blessings last 60 minutes instead of 5.",
+    gold:"Free mount at 40 through the class quest, which is a large chunk of gold you never have to earn.",
+    mount:false},
+  hunter:{n:"Hunter",armour:"Mail from 40",buffs:["ap"],
+    races:["human","dwarf","nightelf","orc","tauren","troll","skyborne_a","skyborne_h"],
+    specs:"Beast Mastery, Marksmanship, Survival — all damage",
+    slot:"Pure DPS with no group buff to trade on, so the slot is earned on output alone. The upside is that hunters gear from sources nobody else contests early.",
+    weapon:"The ranged weapon is your damage; melee weapons are stat sticks. Survival is the exception — it is now a melee dual-wield spec after a major redesign.",
+    unlock:"Your pet at around level 10, which is the moment levelling speed roughly doubles.",
+    forever:"Traps are usable in combat, pets scale with your stats (Agility feeds pet damage), Aimed Shot is baseline for all specs, and auto shot no longer clips your rotation.",
+    gold:"The best solo farmer in the game while levelling — pet tanking lets you kill things above your level, which is gold and XP at once.",
+    mount:true},
+  rogue:{n:"Rogue",armour:"Leather",buffs:[],
+    races:["human","dwarf","nightelf","gnome","orc","undead","troll","skyborne_a","skyborne_h"],
+    specs:"Assassination, Combat, Subtlety — all damage",
+    slot:"No buffs, no utility to hide behind, pure output. You are also competing with every other rogue for the same leather.",
+    weapon:"Weapon type is now a talent decision — Hack and Slash and similar talents reward committing to one type. Choose swords, daggers, maces or fists early and buy only that type.",
+    unlock:"Poisons around level 20, and Forever's energy regenerates continuously rather than in ticks, which changes the feel of every opener.",
+    forever:"Mutilate, Venom and Thousand Cuts are new; Hemorrhage and Rupture were reworked to synergise.",
+    gold:"Pickpocketing and lockboxes are quiet steady income, and stealth means you can farm nodes in contested zones others avoid.",
+    mount:true},
+  priest:{n:"Priest",armour:"Cloth",buffs:["spirit"],
+    races:["human","dwarf","nightelf","gnome","undead","troll"],
+    specs:"Discipline, Holy (healers), Shadow (ranged DPS)",
+    slot:"Holy and Discipline are the most reliably slotted specs in the game. Shadow is contested and often benched in favour of another healer.",
+    weapon:"A stat stick. Spellpower and Spirit on a staff or mace, nothing else matters.",
+    unlock:"Your racial priest spells and, for Shadow, the deep-tree payoff in the 40s. Below that you are a Smite-and-wand caster.",
+    forever:"Healing-over-time effects can now critically strike, which changes throughput maths across all three specs.",
+    gold:"No class income tricks and a full-price mount. Healers also spend heavily on reagents and water — budget higher than a melee class would.",
+    mount:true},
+  shaman:{n:"Shaman",armour:"Mail from 40",buffs:["ap"],
+    races:["orc","tauren","troll","dwarf","skyborne_h"],
+    specs:"Elemental (ranged DPS), Enhancement (melee DPS), Restoration (healer)",
+    slot:"Totems are per-group rather than per-raid, so raids want several shamans instead of one. That is the opposite of the usual hybrid problem.",
+    weapon:"Enhancement wants a slow two-hander for Windfury; Elemental and Restoration want a spellpower one-hander and shield. Elemental and Restoration share that gear, so you can flip between them on a respec alone.",
+    unlock:"Totems arrive steadily through the teens; Ghost Wolf around 20 is your movement answer.",
+    forever:"Lava Burst is Elemental's capstone, Riptide is Restoration's, Maelstrom Weapon feeds Enhancement's casts, and new talents let you drop and reposition totems far more freely. Lightning Bolt's max rank now casts in 2.5 seconds instead of 3.",
+    gold:"Full-price mount, but Ghost Wolf at 20 covers a lot of the gap. Water Walking and Far Sight are small time-savers that add up.",
+    mount:true},
+  mage:{n:"Mage",armour:"Cloth",buffs:["int"],
+    races:["human","gnome","undead","troll","orc","skyborne_a"],
+    specs:"Arcane, Fire, Frost — all damage",
+    slot:"DPS, but you bring water, food and portals, which means you are never the one cut for utility reasons.",
+    weapon:"A stat stick. If you are Human, Sword Specialisation is a crit racial worth building a weapon choice around; otherwise take the highest spellpower staff.",
+    unlock:"Blink around 20, portals from 40 onward. Your AoE farming ability scales with every rank of your main nuke.",
+    forever:"Arcane is genuinely viable now through Missile Barrage; Ice Lance and Frostfire Bolt are new; Shatter reaches its full 50% crit bonus in three points instead of five.",
+    gold:"The strongest gold engine in a vanilla economy. AoE grinding, portal tips and selling water and food are all income nobody else has. If gold is a goal, this is the class that prints it.",
+    mount:true},
+  warlock:{n:"Warlock",armour:"Cloth",buffs:[],
+    races:["human","gnome","orc","undead","troll"],
+    specs:"Affliction, Demonology, Destruction — all damage",
+    slot:"DPS, but summoning and healthstones make you structurally useful to a raid roster in a way pure DPS classes are not.",
+    weapon:"A stat stick — but note that Spellstone and Firestone are now weapon oils rather than wand-slot items, so your offhand planning changes.",
+    unlock:"Voidwalker around 10 is what makes levelling nearly deathless. Your demon now scales with your gear.",
+    forever:"DoTs can critically strike. Bane of Agony and Bane of Doom are no longer curses, so you can run them alongside a curse. Drain Hope is Affliction's new filler and Incinerate replaces Chaos Bolt for Destruction.",
+    gold:"Free mount at 40 through the class quest. Soul shard management eats bag space, which is a hidden tax on a gathering build.",
+    mount:false},
+  druid:{n:"Druid",armour:"Leather",buffs:["int","spirit"],
+    races:["nightelf","tauren","skyborne_a","skyborne_h"],
+    specs:"Balance (ranged DPS), Feral (melee DPS and tank), Restoration (healer)",
+    slot:"Restoration is the dependable slot in a 20 or 40. Feral bear is the better bet for the 10-player Barrow Deeps.",
+    weapon:"The important Forever change: Bear and Cat damage now scales with your weapon's DPS, and attack speed is irrelevant. Buy the highest-DPS two-hander you can afford, constantly. Restoration wants a spellpower staff instead.",
+    unlock:"Bear Form at 10 and Cat Form at 20. Below 10 you are a Wrath and Moonfire caster.",
+    forever:"Balance gained an Eclipse system rewarding alternating Wrath and Starfire. Feral gained Berserk, Mangle and Lacerate. Restoration gained Wild Growth, and Swiftmend no longer consumes the heal it spends.",
+    gold:"Travel Form means you never buy the level 40 mount, and Feral Swiftness makes gathering routes materially faster.",
+    mount:false}
+};
+
+var PROFS={
+  herbalism:{n:"Herbalism",kind:"Gathering",tool:null,camp:"int",campName:"Incense Candle (Intellect)",
+    pairs:["alchemy"],
+    why:"The cash crop of launch week and the feed for Alchemy. No tool required."},
+  mining:{n:"Mining",kind:"Gathering",tool:"a Mining Pick",camp:null,campName:null,
+    pairs:["blacksmithing","engineering"],
+    why:"Feeds Blacksmithing and Engineering, and ore sells steadily rather than spiking. Needs a Mining Pick before you can touch a node."},
+  skinning:{n:"Skinning",kind:"Gathering",tool:"a Skinning Knife",camp:null,campName:null,
+    pairs:["leatherworking"],
+    why:"The lowest-effort gathering profession — you skin what you were killing anyway. Needs a Skinning Knife from the first general goods vendor you pass."},
+  alchemy:{n:"Alchemy",kind:"Crafting",tool:null,camp:"work",campName:"Alchemy Lab (a workspace)",
+    pairs:["herbalism"],
+    why:"Flasks and potions are a meaningful slice of raid performance and you cannot buy your way out of them cheaply in December."},
+  blacksmithing:{n:"Blacksmithing",kind:"Crafting",tool:"a Blacksmith Hammer",camp:"ap",campName:"Sharpening Wheel (Attack Power)",
+    pairs:["mining"],
+    why:"Plate and mail gear plus weapons. Needs a Blacksmith Hammer. Its campsite object gives Attack Power."},
+  leatherworking:{n:"Leatherworking",kind:"Crafting",tool:null,camp:"work",campName:"Tanning Rack (a workspace)",
+    pairs:["skinning"],
+    why:"Leather and mail gear, which is how a druid, rogue, hunter or shaman self-supplies multiple gear sets instead of waiting on drops."},
+  tailoring:{n:"Tailoring",kind:"Crafting",tool:null,camp:"spirit",campName:"Faction Banner (Spirit)",
+    pairs:[],
+    why:"Needs no gathering partner — cloth drops from humanoids you were killing anyway. Bags are also a permanent income stream."},
+  enchanting:{n:"Enchanting",kind:"Crafting",tool:null,camp:null,campName:null,
+    pairs:["tailoring"],
+    why:"Needs no gatherer either — it eats your own green drops. Expensive to level, and it competes with selling those greens outright."},
+  engineering:{n:"Engineering",kind:"Crafting",tool:"a Blacksmith Hammer",camp:null,campName:null,
+    pairs:["mining"],
+    why:"Utility and trinkets rather than gear, and a notorious gold sink. Gnomes get a failure-rate racial for it."}
+};
+
+var BUFFNAME={int:"Intellect",spirit:"Spirit",ap:"Attack Power"};
+
+/* ---------------- state ---------------- */
+
+var STATE;
+try{ STATE=JSON.parse(document.getElementById("state").textContent)||{}; }catch(e){ STATE={}; }
+if(!STATE.checked) STATE.checked={};
+if(!STATE.cfg) STATE.cfg=null;
+
+var draft={cls:null,race:null,profs:[]};
+
+/* ---------------- plan generator ---------------- */
+
+function buildPlan(cfg){
+  var C=CLASSES[cfg.cls], R=RACES[cfg.race];
+  var P=cfg.profs.map(function(k){ return PROFS[k]; });
+  var gatherers=P.filter(function(p){ return p.kind==="Gathering"; });
+  var crafters=P.filter(function(p){ return p.kind==="Crafting"; });
+  var tools=P.filter(function(p){ return p.tool; });
+  var profNames=P.map(function(p){ return p.n; }).join(" + ");
+
+  // camp object overlap
+  var overlap=P.filter(function(p){ return p.camp && C.buffs.indexOf(p.camp)>=0; });
+  var clean=P.filter(function(p){ return p.camp==="work"; });
+  var campLine;
+  if(overlap.length){
+    campLine="Your "+overlap.map(function(p){ return p.n+"'s "+p.campName; }).join(" and ")+
+      " duplicates a buff your own class already provides ("+C.buffs.map(function(b){ return BUFFNAME[b]; }).join(" and ")+
+      "), and camp buffs do not stack with equivalent class buffs. In your own group that object is dead weight"+
+      (clean.length?" — contribute the "+clean[0].campName+" instead.":" — let a groupmate cover that slot and contribute something else.");
+  } else if(clean.length){
+    campLine="Contribute the "+clean[0].campName+". Workspace objects never collide with a class buff, so it is always worth its slot.";
+  } else {
+    campLine="Neither of your professions has a documented campsite object yet. Each profession unlocks three at different skill levels, but only Blacksmithing, Tailoring, Herbalism, Alchemy, Leatherworking and Cooking have been published so far.";
+  }
+
+  // synergy verdict
+  var paired=false;
+  P.forEach(function(p){ P.forEach(function(q){ if(p!==q && p.pairs.indexOf(keyOf(q))>=0) paired=true; }); });
+  var synergy;
+  if(paired) synergy="These two feed each other — the gatherer supplies the crafter, so you never buy your own reagents. The safest possible pairing.";
+  else if(gatherers.length===2) synergy="Two gatherers is the pure gold build: maximum income, zero crafting, and you buy every consumable you need. It earns more than it saves, but it saves nothing.";
+  else if(crafters.length===2) synergy="Two crafters with no gatherer means buying every reagent at market price. Viable only if one of them is Tailoring or Enchanting, which feed themselves.";
+  else synergy="Your gatherer does not feed your crafter, so you will be selling one set of materials and buying another. Workable, but check you are not paying a spread on your own time.";
+
+  var mountLine=C.mount
+    ? "Set gold aside for the level 40 mount from week two. It is the single largest sink on the levelling curve and running it down to the wire costs you levelling speed."
+    : C.n+" gets a free mount at 40 through the class quest, so the biggest gold sink of the levelling curve does not apply to you. Put that money into weapons and recipes instead.";
+
+  var manualLine;
+  if(gatherers.length) manualLine="An early quest at level 3 to 4 hands you a manual for Herbalism, Mining or Skinning. Take "+(gatherers[0].n==="Herbalism"||gatherers[0].n==="Mining"||gatherers[0].n==="Skinning"?gatherers[0].n:"whichever you are running")+" — free skill on a profession you were taking anyway.";
+  else manualLine="An early quest at level 3 to 4 hands you a manual for Herbalism, Mining or Skinning. You have taken neither, so take whichever you can sell the materials of and drop it once the Legacy skill thresholds are banked.";
+
+  var toolLine=tools.length
+    ? "Buy "+tools.map(function(p){ return p.tool+" for "+p.n; }).join(" and ")+" at the first general goods vendor. Without the right tool the profession is unusable, and people routinely forget for an entire evening."
+    : "Neither "+profNames+" needs a tool, so there is nothing to buy at the general goods vendor. Spend that copper on bags.";
+
+  var P0=[
+    {id:"a1",t:"Reserve your name on 27 October",w:"Character creation and name reservation open a week before the 4 November launch. First come, and a fresh-realm land grab.",tags:["time"]},
+    {id:"a2",t:"Confirm "+R.n,w:R.note+" Actives: "+R.act+". Passives: "+R.pas+".",tags:[]},
+    {id:"a3",t:"Confirm "+profNames,w:synergy,tags:["gold"]},
+    {id:"a4",t:tools.length?"Note the tools you must buy on day one":"No profession tools to buy",w:toolLine,tags:[]},
+    {id:"a5",t:"Plan the Legacy spend before you earn any",w:"16 points per character at launch out of roughly 65 earnable, and points are earned account-wide but spent per character. Adventure tree first for rested XP and earlier talent points; shift to Professions once you are gathering seriously.",tags:[]},
+    {id:"a6",t:"Skip all attunement research",w:"Blizzard confirmed no attunements for the launch raids. In vanilla this was weeks of work. It is now zero — spend that time on gear.",tags:["raid"]},
+    {id:"a7",t:"Write the two dates on the wall",w:"4 November launch, 9 December raids. Five weeks to reach 60 and be geared.",tags:["time","raid"]},
+    {id:"a8",t:"Decide your raid spec now, not at 60",w:C.specs+". "+C.slot+" Choosing now decides which drops you keep on the way up.",tags:["raid"]}
+  ];
+
+  var P1=[
+    {id:"b1",t:"Take the gathering manual quest at level 3 to 4",w:manualLine,tags:["gold"]},
+    {id:"b2",t:"Train "+profNames+" as early as trainers allow",w:"Skill thresholds at 150, 225 and 300 each award Legacy Points, so the earlier you start the earlier they land. Both slots filled on day one.",tags:["gold"]}
+  ];
+  if(tools.length) P1.push({id:"b3",t:"Buy "+tools.map(function(p){return p.tool;}).join(" and "),w:toolLine,tags:[]});
+  P1.push({id:"b4",t:"Buy bags before you buy anything else",w:"Bag space is the real constraint in week one"+(crafters.length?", and crafting professions make it worse by filling you with reagents":"")+". Four cheap bags beat one good item.",tags:["gold"]});
+  P1.push({id:"b5",t:"Pick up Cooking as a secondary",w:"The Upgraded Campfire raises a campsite's object capacity from three to five. Someone in the group needs it and it may as well be you.",tags:[]});
+  P1.push({id:"b6",t:"End every session parked in an inn",w:"Rested XP accrues from the moment you log out somewhere that grants it, and the Adventure Legacy tree multiplies it.",tags:[]});
+
+  var P2=[
+    {id:"c1",t:"Weapon discipline: "+C.n,w:C.weapon,tags:[]},
+    {id:"c2",t:"Key unlocks this stretch",w:C.unlock,tags:[]},
+    {id:"c3",t:"Know what Forever changed about your class",w:C.forever,tags:[]}
+  ];
+  if(gatherers.length){
+    P2.push({id:"c4",t:"Sell surplus materials NOW, not later",w:"Launch week is the only time the whole server levels professions at once. Low-level "+gatherers.map(function(p){return p.n.toLowerCase();}).join(" and ")+" materials will never be worth more than they are in the first ten days. Do not bank them waiting for a better moment.",tags:["gold","time"]});
+    P2.push({id:"c5",t:"Push "+gatherers[0].n+" to 150",w:"First tradeskill Legacy threshold. You reach it naturally if you never walk past a node.",tags:["gold"]});
+  } else {
+    P2.push({id:"c4",t:"Buy reagents in week one, not week four",w:"With no gatherer of your own you are buying everything. Launch week is when materials are abundant and before the crafted-goods market matures. Stock early.",tags:["gold","time"]});
+  }
+  P2.push({id:"c6",t:"Run the early new dungeons",w:"Hall of Thanes and Ruins of Lordaeron sit in the 13 to 30 band. Dungeon completions are their own Legacy challenge category, and the gear beats anything you quest into.",tags:[]});
+
+  var P3=[
+    {id:"d1",t:"Weapon check every five levels",w:"Vendor, quest reward or auction house, whichever is highest. Treat a stale weapon as a bug.",tags:[]},
+    {id:"d2",t:C.mount?"Start the mount fund":"Do not save for a mount",w:mountLine,tags:["gold"].concat(C.mount?[]:["unsure"])},
+    {id:"d3",t:"Spend your first Legacy points in Adventure",w:"Rested XP generation and earlier talent point access. Both compound over exactly the window you have left.",tags:[]}
+  ];
+  if(gatherers.length) D2push(P3,{id:"d4",t:"Push "+gatherers[0].n+" to 225",w:"Second tradeskill threshold, second Legacy Point from this profession.",tags:["gold"]});
+  if(crafters.length) D2push(P3,{id:"d5",t:"Level "+crafters[0].n+" only as far as its recipes justify",w:"Crafting skill with no useful recipe behind it is burned materials. Skill for a reason, not for the number.",tags:["gold"]});
+
+  var P4=[
+    {id:"e1",t:"Level through Riverglades",w:"A brand new 35 to 45 zone of rivers, grasslands and trade routes. New quest density and, for a gatherer, routes nobody has optimised yet.",tags:["gold"]},
+    {id:"e2",t:"Run Excavation Site and City of Dalaran",w:"More of the nine new dungeons, more Legacy dungeon credit, and the blues here are the start of your actual raid kit.",tags:["raid"]},
+    {id:"e3",t:"Open the consumable bank",w:(crafters.some(function(p){return p.n==="Alchemy";})?"Everything you gather from here is a flask or potion you are not buying at December prices.":"Start buying and banking consumables now. In December the whole server wants them at once and the price shows it."),tags:["raid","gold"]},
+    {id:"e4",t:"Start guild conversations",w:"Raid rosters are settled before raids open, not after. Turning up on 9 December without a guild means watching the first lockout.",tags:["raid","time"]}
+  ];
+
+  var P5=[
+    {id:"f1",t:"Protect the schedule",w:"58 by the end of this week keeps 60 comfortable. Experience values were confirmed unchanged from Classic, so plan for Classic's pace, not a faster one.",tags:["time"]},
+    {id:"f2",t:"Push both professions toward 300",w:"The third and largest Legacy threshold, and for a crafter the recipes that matter for raiding live at the top of the tree.",tags:["raid"]},
+    {id:"f3",t:"Commit to the spec and gear only for it",w:C.specs+". From here stop keeping drops for the spec you are not playing — two half gear sets is how you end up in neither raid slot. Your armour type is "+C.armour+".",tags:["raid"]}
+  ];
+
+  var P6=[
+    {id:"g1",t:"Hit 60 with days to spare, not hours",w:"Everything below needs a 60 to do it. Arriving at 60 on the 8th means arriving at the raid undergeared.",tags:["time","raid"]},
+    {id:"g2",t:"Quest and grind Mount Hyjal",w:"The new level 60 zone, set after Archimonde's defeat, with Darkwhisper Gorge attached. Endgame gear and reputation before the raid opens.",tags:["raid"]},
+    {id:"g3",t:"Clear the level 60 dungeons for pre-raid gear",w:"Shaper's Terrace, Blackmaw Hold, The Drowned City and Alcaz Island Prison. With no attunement grind to do, this is what that reclaimed time is for.",tags:["raid"]},
+    {id:"g4",t:"Stock consumables for the first lockout",w:"Barrow Deeps (10), Hyjal Summit (20) and Onyxia's Lair (40) all open on 9 December. Turn up with a full bag of consumables, not a plan to buy them that morning.",tags:["raid","gold"]},
+    {id:"g5",t:"Respec and finish the set",w:"Do it with at least a week left so you can gear the spec rather than showing up in the other one's kit.",tags:["raid"]},
+    {id:"g6",t:"Finish spending all 16 Legacy points",w:"Professions for gathering yield, Resourcefulness for durability loss and reagent costs — both worth more at 60 than the Adventure levelling perks.",tags:[]}
+  ];
+
+  var P7=[
+    {id:"h1",t:"Always log out in an inn or a city",w:"The cheapest levelling speed available, amplified by the Adventure tree.",tags:[]},
+    {id:"h2",t:"Contribute the right campsite object",w:campLine,tags:[]},
+    {id:"h3",t:"Remember each player adds only one object",w:"A Basic Campfire holds three objects, upgraded holds five, and each nearby player contributes one. You are not meant to fill a campsite alone, so never take a profession to close a gap a groupmate closes for free.",tags:[]},
+    {id:"h4",t:"Play to your class's income",w:C.gold,tags:["gold"]},
+    {id:"h5",t:"Park the other professions on an alt",w:"Legacy Points are earned account-wide and spent per character, so an alt levelling a third and fourth profession is funding perks on this character. It is the one thing that makes alt time not wasted time.",tags:[]}
+  ];
+
+  return [
+    {id:"p0",when:"Now – 3 Nov",lv:"Pre-launch",title:"Decisions, made once",
+      note:"Everything here is free now and expensive later.",items:P0},
+    {id:"p1",when:"4 Nov",lv:"Lv 1–10",title:"Day one",
+      note:"Expect queues. The goal today is not levels, it is switching on the things that compound.",items:P1},
+    {id:"p2",when:"Week 1",lv:"Lv 10–22",title:"The habits that decide the run",
+      note:"Your class comes online here, and the launch economy peaks and never returns.",items:P2},
+    {id:"p3",when:"Week 2",lv:"Lv 22–35",title:"Compounding",
+      note:"Nothing dramatic unlocks. This is where the plan either builds a base or quietly does not.",items:P3},
+    {id:"p4",when:"Week 3",lv:"Lv 35–45",title:"Riverglades",
+      note:"A brand new zone sits exactly in this band, which makes it the most interesting week of the run-up.",items:P4},
+    {id:"p5",when:"Week 4",lv:"Lv 45–58",title:"The long stretch",
+      note:"The least eventful week and the one most likely to slip.",items:P5},
+    {id:"p6",when:"Week 5 → 9 Dec",lv:"Lv 58–60",title:"Raid-ready",
+      note:"No attunements. The only question is whether you are geared.",items:P6},
+    {id:"p7",when:"Every session",lv:"Standing",title:"Habits, not tasks",
+      note:"Tick these once they are automatic.",items:P7}
+  ];
+}
+function D2push(arr,it){ arr.push(it); }
+function keyOf(p){ for(var k in PROFS){ if(PROFS[k]===p) return k; } return null; }
+
+/* ---------------- render ---------------- */
+
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+function days(to){ return Math.max(0,Math.ceil((to.getTime()-Date.now())/86400000)); }
+var TAGNAME={gold:"Gold",raid:"Raid-ready",time:"Time-sensitive",unsure:"Unconfirmed"};
+function tagHTML(l){ if(!l||!l.length) return ""; return '<span class="tags">'+l.map(function(t){ return '<span class="tag '+t+'">'+esc(TAGNAME[t]||t)+'</span>'; }).join("")+'</span>'; }
+function facClass(f){ return f==="a"?"a":(f==="h"?"h":"n"); }
+function facName(f){ return f==="a"?"Alliance":"Horde"; }
+
+function renderSetup(){
+  var h="";
+  h+='<p class="eyebrow">World of Warcraft: Forever · launch planner</p>';
+  h+='<h1>Path to Barrow Deeps</h1>';
+  h+='<p class="standfirst">Pick a class, a race and two professions. The plan below builds itself around them — phased from now to 9 December, when Barrow Deeps, Hyjal Summit and Onyxia open.</p>';
+
+  h+='<section class="step"><div class="step-head"><span class="step-n">Step 1</span><h2>Class</h2></div><div class="grid">';
+  Object.keys(CLASSES).forEach(function(k){
+    var c=CLASSES[k];
+    h+='<button class="opt" type="button" data-pick="cls" data-v="'+k+'" aria-pressed="'+(draft.cls===k)+'">'
+      +'<span class="nm">'+esc(c.n)+'</span><span class="sub">'+esc(c.armour)+'</span></button>';
+  });
+  h+='</div></section>';
+
+  h+='<section class="step"><div class="step-head"><span class="step-n">Step 2</span><h2>Race</h2>';
+  if(!draft.cls) h+='<span class="step-hint">pick a class first</span>';
+  h+='</div>';
+  if(draft.cls){
+    h+='<div class="grid">';
+    CLASSES[draft.cls].races.forEach(function(rk){
+      var r=RACES[rk];
+      h+='<button class="opt" type="button" data-pick="race" data-v="'+rk+'" aria-pressed="'+(draft.race===rk)+'">'
+        +'<span class="nm">'+esc(r.n)+'</span><span class="sub fac '+facClass(r.f)+'">'+facName(r.f)+'</span></button>';
+    });
+    h+='</div><p class="muted">Only combinations playable in Forever are shown, including the six new ones and the Skyborne.</p>';
+  }
+  h+='</section>';
+
+  h+='<section class="step"><div class="step-head"><span class="step-n">Step 3</span><h2>Professions</h2><span class="step-hint">'+draft.profs.length+' / 2</span></div><div class="grid">';
+  Object.keys(PROFS).forEach(function(k){
+    var p=PROFS[k], on=draft.profs.indexOf(k)>=0, full=draft.profs.length>=2&&!on;
+    h+='<button class="opt" type="button" data-pick="prof" data-v="'+k+'" aria-pressed="'+on+'"'+(full?' disabled':'')+'>'
+      +'<span class="nm">'+esc(p.n)+'</span><span class="sub">'+esc(p.kind)+(p.tool?" · needs "+esc(p.tool.replace(/^an? /,"")):"")+'</span></button>';
+  });
+  h+='</div>';
+  if(draft.profs.length){
+    h+='<p class="muted">'+draft.profs.map(function(k){ return "<b>"+esc(PROFS[k].n)+"</b> — "+esc(PROFS[k].why); }).join("<br>")+'</p>';
+  }
+  h+='</section>';
+
+  var ready=draft.cls&&draft.race&&draft.profs.length===2;
+  h+='<div class="go"><button class="btn" type="button" id="build"'+(ready?"":" disabled")+'>Build the plan</button>';
+  if(!ready) h+='<span class="muted" style="margin:0">Choose a class, a race and exactly two professions.</span>';
+  h+='</div>';
+
+  h+=caveatsHTML();
+  return h;
+}
+
+function caveatsHTML(){
+  var h='<div class="caveats" style="margin-top:34px"><h3>What is not confirmed</h3><ul>';
+  h+='<li>Forever launches 4 November 2026 and the beta was capped at level 30. Everything above 30 is reasoning from announced systems, not from play.</li>';
+  h+='<li>Weapon skills exist but whether they level and matter as they did in Classic is undocumented. Defense skill behaviour for tanking is undocumented too.</li>';
+  h+='<li>Free class mounts at 40 for Paladin, Warlock and Druid are assumed from vanilla and not yet confirmed for Forever.</li>';
+  h+='<li>Only six professions have published campsite objects. Each profession is said to unlock three.</li>';
+  h+='<li>A report that experience requirements were reduced was retracted — XP values match Classic. Class tuning will keep moving.</li>';
+  h+='</ul></div>';
+  return h;
+}
+
+function renderPlan(){
+  var cfg=STATE.cfg, C=CLASSES[cfg.cls], R=RACES[cfg.race];
+  var phases=buildPlan(cfg);
+  var all=[]; phases.forEach(function(p){ p.items.forEach(function(i){ all.push(i); }); });
+  var done=all.filter(function(i){ return STATE.checked[i.id]; }).length;
+
+  var h="";
+  h+='<p class="eyebrow">World of Warcraft: Forever · '+esc(facName(R.f))+'</p>';
+  h+='<h1>Path to Barrow Deeps</h1>';
+  h+='<div class="build">';
+  h+='<span class="chip">Class <b>'+esc(C.n)+'</b></span>';
+  h+='<span class="chip">Race <b>'+esc(R.n)+'</b></span>';
+  cfg.profs.forEach(function(k){ h+='<span class="chip">'+esc(PROFS[k].kind)+' <b>'+esc(PROFS[k].n)+'</b></span>'; });
+  h+='<button class="btn ghost" type="button" id="reset">Change build</button>';
+  h+='</div>';
+
+  h+='<div class="clocks">';
+  h+='<div class="clock"><span class="n">'+days(LAUNCH)+'</span><span class="l"><b>days to launch</b>4 November 2026</span></div>';
+  h+='<div class="clock hot"><span class="n">'+days(RAIDS)+'</span><span class="l"><b>days to raids</b>9 December · no attunements</span></div>';
+  h+='</div>';
+
+  h+='<div class="meter"><div class="meter-top"><span>Overall</span><strong>'+done+' / '+all.length+'</strong></div>';
+  h+='<div class="bar"><i style="width:'+(all.length?Math.round(done/all.length*100):0)+'%"></i></div>';
+  h+='<div class="save" id="save"></div></div>';
+
+  h+='<div class="key">'+Object.keys(TAGNAME).map(function(t){ return '<span class="tag '+t+'">'+esc(TAGNAME[t])+'</span>'; }).join("")+'</div>';
+
+  h+='<div class="ladder">';
+  phases.forEach(function(p,idx){
+    var d=p.items.filter(function(i){ return STATE.checked[i.id]; }).length;
+    var cx=d===p.items.length;
+    h+='<section class="phase'+(cx?' complete':'')+'"><div class="rung">'+(cx?'✓':idx)+'</div>';
+    h+='<div class="phase-head"><div class="phase-when"><span>'+esc(p.when)+'</span><span class="lv">'+esc(p.lv)+'</span><span class="phase-count">'+d+'/'+p.items.length+'</span></div>';
+    h+='<h2>'+esc(p.title)+'</h2><p class="phase-note">'+esc(p.note)+'</p></div><ul class="items">';
+    p.items.forEach(function(it){
+      var on=!!STATE.checked[it.id];
+      h+='<li class="item'+(on?' done':'')+'"><label for="'+it.id+'">';
+      h+='<input type="checkbox" id="'+it.id+'" data-id="'+it.id+'"'+(on?' checked':'')+'>';
+      h+='<span class="txt"><span class="t">'+esc(it.t)+'</span><span class="w">'+esc(it.w)+'</span>'+tagHTML(it.tags)+'</span>';
+      h+='</label></li>';
+    });
+    h+='</ul></section>';
+  });
+  h+='</div>';
+  h+=caveatsHTML();
+  h+='<footer>Built from Blizzard’s Forever deep-dive and roadmap, Wowhead’s Forever guides and Icy Veins’ Forever class, race and Legacy pages. Ticks and your build save to this page.</footer>';
+  return h;
+}
+
+function render(){
+  var root=document.getElementById("root");
+  root.innerHTML = STATE.cfg ? renderPlan() : renderSetup();
+  if(savedNote){ var s=document.getElementById("save"); if(s) s.textContent=savedNote; }
+}
+
+/* ---------------- events ---------------- */
+
+var savedNote="",artifactNS=null,tried=false,timer=null;
+
+document.getElementById("root").addEventListener("click",function(e){
+  var b=e.target.closest ? e.target.closest("button") : null;
+  if(!b) return;
+  if(b.id==="build"){
+    STATE.cfg={cls:draft.cls,race:draft.race,profs:draft.profs.slice()};
+    STATE.checked={};
+    render(); queueSave(); window.scrollTo(0,0); return;
+  }
+  if(b.id==="reset"){
+    draft={cls:STATE.cfg.cls,race:STATE.cfg.race,profs:STATE.cfg.profs.slice()};
+    STATE.cfg=null; render(); window.scrollTo(0,0); return;
+  }
+  var pick=b.getAttribute("data-pick");
+  if(!pick) return;
+  var v=b.getAttribute("data-v");
+  if(pick==="cls"){
+    if(draft.cls!==v){ draft.cls=v; if(CLASSES[v].races.indexOf(draft.race)<0) draft.race=null; }
+  } else if(pick==="race"){
+    draft.race = draft.race===v ? null : v;
+  } else if(pick==="prof"){
+    var i=draft.profs.indexOf(v);
+    if(i>=0) draft.profs.splice(i,1);
+    else if(draft.profs.length<2) draft.profs.push(v);
+  }
+  render();
+});
+
+document.getElementById("root").addEventListener("change",function(e){
+  var el=e.target;
+  if(!el||el.type!=="checkbox") return;
+  var id=el.getAttribute("data-id"); if(!id) return;
+  if(el.checked) STATE.checked[id]=true; else delete STATE.checked[id];
+  render(); queueSave();
+});
+
+/* ---------------- persistence ---------------- */
+
+function fullDoc(){
+  var css=document.getElementById("appcss").textContent;
+  var js=document.getElementById("appjs").textContent;
+  var st=JSON.stringify(STATE);
+  return '<!doctype html><html lang="en"><head><meta charset="utf-8">'
+    +'<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">'
+    +'<title>Path to Barrow Deeps</title>'
+    +'<link rel="preconnect" href="https://fonts.googleapis.com">'
+    +'<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
+    +'<link rel="stylesheet" href="'+FONTS+'">'
+    +'<style id="appcss">'+css+'<\/style></head><body>'
+    +'<div class="wrap" id="root"><\/div>'
+    +'<script id="state" type="application/json">'+st+'<\/script>'
+    +'<script id="appjs">'+js+'<\/script></body></html>';
+}
+function note(m){ savedNote=m; var el=document.getElementById("save"); if(el) el.textContent=m; }
+function queueSave(){ if(timer) clearTimeout(timer); timer=setTimeout(save,200); }
+async function save(){
+  if(!tried){
+    tried=true;
+    try{ artifactNS=null; }catch(e){ artifactNS=null; }
+  }
+  if(!artifactNS){ note("standalone copy — ticks reset when you reload"); return; }
+  try{ await artifactNS.publish(fullDoc()); note("saved"); }
+  catch(err){
+    if(err&&err.code==="conflict") note("another view saved first — reloading");
+    else note("not saved — "+((err&&err.code)||"error"));
+  }
+}
+
+render();
+})();
+</script>
+</body>
+</html>
